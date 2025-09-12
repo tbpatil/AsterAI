@@ -408,19 +408,17 @@ export default function LandingPage() {
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
                   <span>Powered by xAI</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
-      </div>
+      </footer>
 
       {/* Instructions overlay */}
       <div className="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm">
         Hold <kbd className="bg-blue-700 px-2 py-1 rounded text-xs">Alt</kbd> or <kbd className="bg-blue-700 px-2 py-1 rounded text-xs">⌥</kbd> to activate Lens Mode
-              <div className="text-neutral-600 text-sm">
-                © 2024 AsterAI. All rights reserved.
-              </div>
-            </motion.div>
-          </div>
       </div>
-      </footer>
     </div>
   )
 }

@@ -493,7 +493,7 @@ export function LensOverlay() {
         </div>
       )}
 
-          {/* Loading Skeleton Cards */}
+      {/* Loading Skeleton Cards */}
           <AnimatePresence>
             {loadingCards.map((cardId) => (
               <motion.div
@@ -583,6 +583,8 @@ export function LensOverlay() {
               </motion.div>
             )}
           </AnimatePresence>
+        </>
+      )}
     </>
   )
-}
+} // End of component
