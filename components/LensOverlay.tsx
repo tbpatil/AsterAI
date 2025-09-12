@@ -55,8 +55,7 @@ export function LensOverlay() {
 
       // Skip if hovering over overlay elements
       if (target.closest("[data-lens-overlay]")) {
-        setHoveredElement(null)
-        return
+        return // Don't clear hovered element when over popover to keep it visible
       }
 
       // Find the closest interactive element
@@ -67,8 +66,8 @@ export function LensOverlay() {
 
         // Calculate popover position
         const rect = interactiveElement.getBoundingClientRect()
-        const x = Math.min(e.clientX, window.innerWidth - 300)
-        const y = rect.top - 10
+        const x = Math.min(e.clientX + 10, window.innerWidth - 320)
+        const y = Math.max(10, rect.top - 60)
 
         setPopoverPosition({ x, y })
       }
@@ -87,20 +86,95 @@ export function LensOverlay() {
     // Add loading state
     setLoadingCards((prev) => [...prev, cardId])
 
-    // Simulate API call delay
-    setTimeout(() => {
+    try {
+      let response
+      let resultContent = ""
+
+      // Call appropriate API endpoint based on action
+      switch (action) {
+        case "Summarize":
+          response = await fetch("/api/lens/summarize", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content }),
+          })
+          if (response.ok) {
+            const data = await response.json()
+            resultContent = data.summary
+          }
+          break
+
+        case "Make concise":
+          response = await fetch("/api/lens/concise", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content }),
+          })
+          if (response.ok) {
+            const data = await response.json()
+            resultContent = data.conciseText
+          }
+          break
+
+        case "Visualize":
+          response = await fetch("/api/lens/visualize", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content }),
+          })
+          if (response.ok) {
+            const data = await response.json()
+            resultContent = data.visualization
+          }
+          break
+
+        case "Find similar":
+          response = await fetch("/api/lens/similar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content }),
+          })
+          if (response.ok) {
+            const data = await response.json()
+            resultContent = data.similarContent
+          }
+          break
+
+        default:
+          resultContent = "Action not supported"
+      }
+
+      // Remove loading state
       setLoadingCards((prev) => prev.filter((id) => id !== cardId))
 
+      // Create result card with Grok response
       const newCard: ResultCardData = {
         id: cardId,
         title: getActionTitle(action),
-        content: getActionContent(action, content),
+        content: resultContent || `Failed to process ${action.toLowerCase()} request`,
         sourceUrl: action === "Find similar" ? "https://example.com/similar" : undefined,
         position: { top: rect.bottom, left: rect.left },
       }
 
       setResultCards((prev) => [...prev, newCard])
-    }, 1500)
+    } catch (error) {
+      console.error(`Error with ${action}:`, error)
+
+      // Remove loading state and show error
+      setLoadingCards((prev) => prev.filter((id) => id !== cardId))
+
+      const errorCard: ResultCardData = {
+        id: cardId,
+        title: getActionTitle(action),
+        content: `Error: Failed to ${action.toLowerCase()} content. Please try again.`,
+        position: {
+          top: hoveredElement.getBoundingClientRect().bottom,
+          left: hoveredElement.getBoundingClientRect().left,
+        },
+      }
+
+      setResultCards((prev) => [...prev, errorCard])
+    }
   }
 
   const getActionTitle = (action: string): string => {
@@ -118,27 +192,6 @@ export function LensOverlay() {
     }
   }
 
-  const getActionContent = (action: string, content: string): string => {
-    const truncatedContent = content.slice(0, 100) + (content.length > 100 ? "..." : "")
-
-    switch (action) {
-      case "Summarize":
-        return `This section discusses key findings in document interaction research, highlighting the 40% improvement in task completion and 94% accuracy in content categorization.`
-      case "Make concise":
-        return `Lens-based document interaction improves user productivity by 40% through real-time content analysis and contextual tools.`
-      case "Visualize":
-        return `This content could be represented as a flowchart showing the interaction pipeline: User Input → Content Detection → Analysis → Results Display.`
-      case "Find similar":
-        return `Found 3 related papers on interactive document systems, 2 articles on content analysis methods, and 1 survey on user interface design patterns.`
-      default:
-        return `Processed: ${truncatedContent}`
-    }
-  }
-
-  const dismissCard = (cardId: string) => {
-    setResultCards((prev) => prev.filter((card) => card.id !== cardId))
-  }
-
   const getElementContent = (element: Element): string => {
     if (element.tagName === "IMG") {
       return (element as HTMLImageElement).alt || "Image content"
@@ -146,8 +199,28 @@ export function LensOverlay() {
     return element.textContent?.slice(0, 200) || ""
   }
 
+  const dismissCard = (cardId: string) => {
+    setResultCards((prev) => prev.filter((card) => card.id !== cardId))
+  }
+
   return (
     <>
+      {/* Lens Mode Indicator Badge */}
+      <AnimatePresence>
+        {isLensMode && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none"
+          >
+            <Badge variant="default" className="bg-blue-600 text-white px-4 py-2 text-sm font-medium shadow-lg">
+              🔍 Lens Mode Active - Click on any text to analyze
+            </Badge>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Lens Mode Overlay */}
       <AnimatePresence>
         {isLensMode && (
@@ -188,6 +261,16 @@ export function LensOverlay() {
           className="fixed z-50 pointer-events-auto"
           style={{ top: popoverPosition.y, left: popoverPosition.x }}
           data-lens-overlay
+          onMouseEnter={() => {
+            // Keep the popover visible when hovering over it
+          }}
+          onMouseLeave={(e) => {
+            // Only hide if we're not moving to the hovered element
+            const relatedTarget = e.relatedTarget as Element
+            if (!relatedTarget?.closest("[data-lens-overlay]") && !hoveredElement?.contains(relatedTarget)) {
+              setHoveredElement(null)
+            }
+          }}
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 10 }}
@@ -199,8 +282,12 @@ export function LensOverlay() {
                 <Badge
                   key={action}
                   variant="secondary"
-                  className="cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors text-xs px-2 py-1"
-                  onClick={() => handleAction(action, getElementContent(hoveredElement))}
+                  className="cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900 transition-all duration-200 text-xs px-3 py-2 select-none hover:scale-105 active:scale-95"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleAction(action, getElementContent(hoveredElement))
+                  }}
+                  onMouseDown={(e) => e.stopPropagation()}
                 >
                   {action}
                 </Badge>
