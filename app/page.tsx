@@ -295,13 +295,13 @@ export default function LandingPage() {
                   {/* Step number badge */}
                   <div className="absolute -top-3 -right-3 bg-white text-black font-bold text-lg px-3 py-1 rounded-full border-4 border-black shadow-lg">
                     {step.step}
-                  </div>
-                  
+              </div>
+
                   {/* Connection line (not for last item) */}
                   {index < 2 && (
                     <div className="hidden lg:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-white/20 to-transparent transform translate-x-8"></div>
                   )}
-            </div>
+                </div>
 
                 <h3 className="text-3xl font-bold text-white mb-6 group-hover:text-white transition-colors duration-300">
                   {step.title}
@@ -312,8 +312,8 @@ export default function LandingPage() {
                 </p>
               </motion.div>
             ))}
-          </div>
-        </div>
+                </div>
+              </div>
           </section>
 
       {/* CTA Section */}
