@@ -385,7 +385,7 @@ export function LensOverlay() {
                 exit={{ opacity: 0, y: -20 }}
                 className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none"
               >
-                <Badge variant="default" className="bg-blue-600 text-white px-4 py-2 text-sm font-medium shadow-lg">
+                <Badge variant="default" className="bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 px-4 py-2 text-sm font-medium shadow-lg">
                   🔍 Lens Mode Active - Click on any text to analyze
                 </Badge>
               </motion.div>
@@ -405,6 +405,8 @@ export function LensOverlay() {
               />
             )}
           </AnimatePresence>
+        </>
+      )}
 
       {/* Hovered Element Highlight */}
       <AnimatePresence>
@@ -421,7 +423,7 @@ export function LensOverlay() {
               height: hoveredElement.getBoundingClientRect().height + 4,
             }}
           >
-            <div className="w-full h-full border-2 border-blue-400 rounded-md shadow-lg shadow-blue-400/50" />
+            <div className="w-full h-full border-2 border-gray-400 dark:border-gray-500 rounded-md shadow-lg shadow-gray-400/50 dark:shadow-gray-500/50" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -448,14 +450,14 @@ export function LensOverlay() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             className="bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-3"
           >
-            <div className="grid grid-cols-3 gap-2 w-80">
+            <div className="flex gap-2">
               {hoveredElement?.tagName === "IMG" ? (
                 // Image-specific actions
                 ["Analyze Image"].map((action) => (
                   <Badge
                     key={action}
                     variant="secondary"
-                    className="cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900 transition-all duration-200 text-xs px-2 py-1 select-none hover:scale-105 active:scale-95 text-center"
+                    className="cursor-pointer hover:bg-white hover:text-black transition-all duration-200 text-xs px-3 py-2 select-none hover:scale-105 active:scale-95"
                     onClick={(e) => {
                       e.stopPropagation()
                       handleAction(action, getElementContent(hoveredElement))
@@ -471,7 +473,7 @@ export function LensOverlay() {
                   <Badge
                     key={action}
                     variant="secondary"
-                    className="cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900 transition-all duration-200 text-xs px-2 py-1 select-none hover:scale-105 active:scale-95 text-center"
+                    className="cursor-pointer hover:bg-white hover:text-black transition-all duration-200 text-xs px-3 py-2 select-none hover:scale-105 active:scale-95"
                     onClick={(e) => {
                       e.stopPropagation()
                       if (action === "Ask") {

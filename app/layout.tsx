@@ -5,9 +5,15 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: 'AsterAI - Revolutionary AI-Powered Document Analysis',
+  description: 'Transform how you interact with content using intelligent lens technology. Analyze, summarize, and visualize any document with cutting-edge AI.',
+  keywords: 'AI, document analysis, content summarization, lens technology, artificial intelligence, document processing',
+  authors: [{ name: 'AsterAI Team' }],
+  openGraph: {
+    title: 'AsterAI - Revolutionary AI-Powered Document Analysis',
+    description: 'Transform how you interact with content using intelligent lens technology.',
+    type: 'website',
+  },
 }
 
 export default function RootLayout({
@@ -16,8 +22,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="en" className="dark">
+      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} bg-black text-white antialiased`}>
         {children}
         <Analytics />
       </body>
