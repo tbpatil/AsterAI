@@ -191,7 +191,7 @@ export default function ResearchPaperPage() {
 
       {/* Instructions overlay */}
       <div className="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg text-sm">
-        Hold <kbd className="bg-gray-700 px-2 py-1 rounded text-xs">Alt</kbd> to activate Lens Mode
+        Hold <kbd className="bg-gray-700 px-2 py-1 rounded text-xs">Alt</kbd> or <kbd className="bg-gray-700 px-2 py-1 rounded text-xs">⌥</kbd> to activate Lens Mode
       </div>
     </div>
   )

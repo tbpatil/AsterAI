@@ -415,10 +415,6 @@ export default function LandingPage() {
         </div>
       </footer>
 
-      {/* Instructions overlay */}
-      <div className="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm">
-        Hold <kbd className="bg-blue-700 px-2 py-1 rounded text-xs">Alt</kbd> or <kbd className="bg-blue-700 px-2 py-1 rounded text-xs">⌥</kbd> to activate Lens Mode
-      </div>
     </div>
   )
 }
