@@ -1,30 +1,68 @@
-# Lens mode implementation
+# AsterAI
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+Revolutionary AI-powered document analysis that transforms how you interact with content. Built for the **xAI + Vercel Hackathon**.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/manojbaashas-projects/v0-lens-mode-implementation)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/FwyHpAiKgDo)
+**Live Demo**: [asterai.vercel.app](https://asterai.vercel.app)
 
-## Overview
+## Features
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+- **Lens Mode**: Hold Alt/⌥ to activate intelligent content analysis
+- **Ask Mode**: Ask questions about any selected content
+- **Image Analysis**: Analyze charts, graphs, and visual content with AI
+- **Smart Summarization**: Get concise summaries of any text content
+- **Content Visualization**: Transform information into visual representations  
+- **Similarity Detection**: Find related content across documents
+- **Real-time Analysis**: Instant AI-powered insights
 
-## Deployment
+## Setup
 
-Your project is live at:
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ManojBaasha/asterai.git
+   cd asterai
+   ```
 
-**[https://vercel.com/manojbaashas-projects/v0-lens-mode-implementation](https://vercel.com/manojbaashas-projects/v0-lens-mode-implementation)**
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-## Build your app
+3. **Set up xAI API**
+   - Get your API key from [xAI Console](https://console.x.ai/)
+   - Create a `.env.local` file:
+   ```bash
+   XAI_API_KEY=your_xai_api_key_here
+   ```
 
-Continue building your app on:
+4. **Run the development server**
+   ```bash
+   npm run dev
+   ```
 
-**[https://v0.app/chat/projects/FwyHpAiKgDo](https://v0.app/chat/projects/FwyHpAiKgDo)**
+5. **Open [http://localhost:3000](http://localhost:3000)** in your browser
 
-## How It Works
+## How to Use
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+1. Visit the demo page
+2. Hold **Alt** (or **⌥** on Mac) to activate Lens Mode
+3. Hover over any content to see analysis options
+4. Click to get AI-powered insights!
+
+## Tech Stack
+
+- **Frontend**: Next.js, React, TypeScript
+- **UI Components**: Shadcn/ui, Radix UI, Tailwind CSS
+- **Animations**: Framer Motion
+- **AI**: xAI API for content analysis
+- **Deployment**: Vercel
+
+## Contributors
+
+- **Anirudh Venkatachalam** - [@anirudhvee](https://github.com/anirudhvee)
+- **Manasvini Narayanan** - [@mana-nara](https://github.com/mana-nara)  
+- **ManojBaasha** - [@ManojBaasha](https://github.com/ManojBaasha)
+- **Toniya** - [@tbpatil](https://github.com/tbpatil)
+
+---
+
+*Built for the xAI + Vercel Hackathon 2025*
