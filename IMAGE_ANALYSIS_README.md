@@ -1,6 +1,6 @@
 # Image Analysis Feature
 
-This document describes the new image analysis functionality added to the AsterAI project.
+This document describes the image analysis functionality in the AsterAI project.
 
 ## Features
 
@@ -17,17 +17,9 @@ This document describes the new image analysis functionality added to the AsterA
   - Key data points extraction
   - Insights and patterns
 
-### 2. PDF Viewer with Image Analysis
-- **Component**: `PDFViewer.tsx`
-- **Features**:
-  - Upload and view PDF files using react-pdf
-  - Click on images within PDFs to analyze them
-  - Zoom, rotate, and navigate through PDF pages
-  - Sample images for testing functionality
-
-### 3. Enhanced Lens Overlay
+### 2. Enhanced Lens Overlay
 - **Component**: `LensOverlay.tsx`
-- **New Features**:
+- **Features**:
   - Detects when hovering over images
   - Shows "Analyze Image" option for images
   - Integrates with existing text analysis features
@@ -35,17 +27,10 @@ This document describes the new image analysis functionality added to the AsterA
 
 ## Usage
 
-### For PDF Images
-1. Switch to "PDF Viewer" mode using the toggle in the top-right
-2. Upload a PDF file
-3. Click on any image within the PDF
-4. View the comprehensive analysis in the overlay
-
 ### For Document Images
-1. Stay in "Document" mode
-2. Hold Alt key to activate Lens Mode
-3. Hover over any image in the document
-4. Click "Analyze Image" to get analysis
+1. Hold Alt key to activate Lens Mode
+2. Hover over any image in the document
+3. Click "Analyze Image" to get analysis
 
 ### Analysis Results Include
 - **Summary**: Detailed description of what the image shows
@@ -71,10 +56,6 @@ interface ImageAnalysisResult {
 }
 ```
 
-### Dependencies Added
-- `react-pdf`: For PDF rendering
-- `pdfjs-dist`: PDF.js library for PDF processing
-
 ### Environment Variables Required
 - `XAI_API_KEY`: Your XAI API key for image analysis
 
@@ -82,5 +63,4 @@ interface ImageAnalysisResult {
 - Support for more image formats
 - Batch image analysis
 - Export analysis results
-- Integration with more PDF libraries
 - Advanced graph recreation tools
