@@ -1,13 +1,51 @@
 "use client"
 
+import { useState } from "react"
 import { LensOverlay } from "@/components/LensOverlay"
+import { PDFViewer } from "@/components/PDFViewer"
+import { Button } from "@/components/ui/button"
+import { FileText, BookOpen } from "lucide-react"
 
 export default function ResearchPaperPage() {
+  const [viewMode, setViewMode] = useState<"document" | "pdf">("document")
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <LensOverlay />
+      
+      {/* View Mode Toggle */}
+      <div className="fixed top-4 right-4 z-30">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-2">
+          <div className="flex gap-1">
+            <Button
+              variant={viewMode === "document" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setViewMode("document")}
+              className="flex items-center gap-2"
+            >
+              <BookOpen className="h-4 w-4" />
+              Document
+            </Button>
+            <Button
+              variant={viewMode === "pdf" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setViewMode("pdf")}
+              className="flex items-center gap-2"
+            >
+              <FileText className="h-4 w-4" />
+              PDF Viewer
+            </Button>
+          </div>
+        </div>
+      </div>
 
-      {/* PDF-style container */}
+      {viewMode === "pdf" ? (
+        <div className="h-screen">
+          <PDFViewer />
+        </div>
+      ) : (
+        <>
+          {/* PDF-style container */}
       <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 shadow-2xl min-h-screen">
         {/* PDF Header */}
         <div className="px-12 pt-16 pb-8 border-b border-gray-200 dark:border-gray-700">
@@ -189,10 +227,12 @@ export default function ResearchPaperPage() {
         </div>
       </div>
 
-      {/* Instructions overlay */}
-      <div className="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm">
-        Hold <kbd className="bg-blue-700 px-2 py-1 rounded text-xs">Alt</kbd> to activate Lens Mode
-      </div>
+          {/* Instructions overlay */}
+          <div className="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm">
+            Hold <kbd className="bg-blue-700 px-2 py-1 rounded text-xs">Alt</kbd> to activate Lens Mode
+          </div>
+        </>
+      )}
     </div>
   )
 }

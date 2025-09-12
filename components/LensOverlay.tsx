@@ -100,62 +100,111 @@ export function LensOverlay() {
       let response
       let resultContent = ""
 
-      // Call appropriate API endpoint based on action
-      switch (action) {
-        case "Summarize":
-          response = await fetch("/api/lens/summarize", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ content }),
-          })
-          if (response.ok) {
-            const data = await response.json()
-            resultContent = data.summary
+      // Check if the hovered element is an image
+      const isImage = hoveredElement.tagName === "IMG"
+      
+      if (isImage && action === "Analyze Image") {
+        // Handle image analysis
+        const img = hoveredElement as HTMLImageElement
+        
+        // Convert image to base64
+        const canvas = document.createElement("canvas")
+        const ctx = canvas.getContext("2d")
+        if (!ctx) throw new Error("Could not get canvas context")
+        
+        canvas.width = img.naturalWidth
+        canvas.height = img.naturalHeight
+        ctx.drawImage(img, 0, 0)
+        
+        const imageData = canvas.toDataURL("image/png").split(",")[1]
+
+        response = await fetch("/api/lens/analyze-image", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            imageData,
+            imageType: "image/png"
+          }),
+        })
+        
+        if (response.ok) {
+          const data = await response.json()
+          const analysis = data.analysis
+          
+          // Format the analysis result
+          resultContent = `**Summary:** ${analysis.summary}\n\n**Description:** ${analysis.conciseDescription}`
+          
+          if (analysis.isGraph) {
+            resultContent += `\n\n**Chart Type:** ${analysis.graphType || "Data Visualization"}`
+            if (analysis.recreationInstructions) {
+              resultContent += `\n\n**How to Recreate:**\n${analysis.recreationInstructions}`
+            }
+            if (analysis.keyDataPoints && analysis.keyDataPoints.length > 0) {
+              resultContent += `\n\n**Key Data Points:**\n${analysis.keyDataPoints.map((point: string) => `• ${point}`).join('\n')}`
+            }
+            if (analysis.insights) {
+              resultContent += `\n\n**Insights:** ${analysis.insights}`
+            }
           }
-          break
+        }
+      } else {
+        // Call appropriate API endpoint based on action for text content
+        switch (action) {
+          case "Summarize":
+            response = await fetch("/api/lens/summarize", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ content }),
+            })
+            if (response.ok) {
+              const data = await response.json()
+              resultContent = data.summary
+            }
+            break
 
-        case "Make concise":
-          response = await fetch("/api/lens/concise", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ content }),
-          })
-          if (response.ok) {
-            const data = await response.json()
-            resultContent = data.conciseText
-          }
-          break
+          case "Make concise":
+            response = await fetch("/api/lens/concise", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ content }),
+            })
+            if (response.ok) {
+              const data = await response.json()
+              resultContent = data.conciseText
+            }
+            break
 
-        case "Visualize":
-          response = await fetch("/api/lens/visualize", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ content }),
-          })
-          if (response.ok) {
-            const data = await response.json()
-            resultContent = data.visualization
-          }
-          break
+          case "Visualize":
+            response = await fetch("/api/lens/visualize", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ content }),
+            })
+            if (response.ok) {
+              const data = await response.json()
+              resultContent = data.visualization
+            }
+            break
 
-        case "Find similar":
-          response = await fetch("/api/lens/similar", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ content }),
-          })
-          if (response.ok) {
-            const data = await response.json()
-            resultContent = data.similarContent
-          }
-          break
+          case "Find similar":
+            response = await fetch("/api/lens/similar", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ content }),
+            })
+            if (response.ok) {
+              const data = await response.json()
+              resultContent = data.similarContent
+            }
+            break
 
-        case "Ask":
-          // This will be handled separately with the modal
-          return
+          case "Ask":
+            // This will be handled separately with the modal
+            return
 
-        default:
-          resultContent = "Action not supported"
+          default:
+            resultContent = "Action not supported"
+        }
       }
 
       // Remove loading state
@@ -198,6 +247,8 @@ export function LensOverlay() {
         return "Visual Analysis"
       case "Find similar":
         return "Related Content"
+      case "Analyze Image":
+        return "Image Analysis"
       default:
         return action
     }
@@ -346,82 +397,101 @@ export function LensOverlay() {
             {isLensMode && (
               <motion.div
                 ref={overlayRef}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black/30 z-40 pointer-events-none"
-                data-lens-overlay
-              />
-            )}
-          </AnimatePresence>
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/30 z-40 pointer-events-none"
+            data-lens-overlay
+          />
+        )}
+      </AnimatePresence>
 
-          {/* Hovered Element Highlight */}
-          <AnimatePresence>
-            {isLensMode && hoveredElement && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed pointer-events-none z-50"
-                style={{
-                  top: hoveredElement.getBoundingClientRect().top - 2,
-                  left: hoveredElement.getBoundingClientRect().left - 2,
-                  width: hoveredElement.getBoundingClientRect().width + 4,
-                  height: hoveredElement.getBoundingClientRect().height + 4,
-                }}
-              >
-                <div className="w-full h-full border-2 border-blue-400 rounded-md shadow-lg shadow-blue-400/50" />
-              </motion.div>
-            )}
-          </AnimatePresence>
+      {/* Hovered Element Highlight */}
+      <AnimatePresence>
+        {isLensMode && hoveredElement && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed pointer-events-none z-50"
+            style={{
+              top: hoveredElement.getBoundingClientRect().top - 2,
+              left: hoveredElement.getBoundingClientRect().left - 2,
+              width: hoveredElement.getBoundingClientRect().width + 4,
+              height: hoveredElement.getBoundingClientRect().height + 4,
+            }}
+          >
+            <div className="w-full h-full border-2 border-blue-400 rounded-md shadow-lg shadow-blue-400/50" />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          {/* Action Popover */}
-          {isLensMode && hoveredElement && (
-            <div
-              className="fixed z-50 pointer-events-auto"
-              style={{ top: popoverPosition.y, left: popoverPosition.x }}
-              data-lens-overlay
-              onMouseEnter={() => {
-                // Keep the popover visible when hovering over it
-              }}
-              onMouseLeave={(e) => {
-                // Only hide if we're not moving to the hovered element
-                const relatedTarget = e.relatedTarget as Element
-                if (!relatedTarget?.closest("[data-lens-overlay]") && !hoveredElement?.contains(relatedTarget)) {
-                  setHoveredElement(null)
-                }
-              }}
-            >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                className="bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-3"
-              >
-                <div className="grid grid-cols-3 gap-2 w-80">
-                  {["Summarize", "Make concise", "Visualize", "Find similar", "Ask"].map((action) => (
-                    <Badge
-                      key={action}
-                      variant="secondary"
-                      className="cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900 transition-all duration-200 text-xs px-2 py-1 select-none hover:scale-105 active:scale-95 text-center"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        if (action === "Ask") {
-                          handleAskAction()
-                        } else {
-                          handleAction(action, getElementContent(hoveredElement))
-                        }
-                      }}
-                      onMouseDown={(e) => e.stopPropagation()}
-                    >
-                      {action}
-                    </Badge>
-                  ))}
-                </div>
-              </motion.div>
+      {/* Action Popover */}
+      {isLensMode && hoveredElement && (
+        <div
+          className="fixed z-50 pointer-events-auto"
+          style={{ top: popoverPosition.y, left: popoverPosition.x }}
+          data-lens-overlay
+          onMouseEnter={() => {
+            // Keep the popover visible when hovering over it
+          }}
+          onMouseLeave={(e) => {
+            // Only hide if we're not moving to the hovered element
+            const relatedTarget = e.relatedTarget as Element
+            if (!relatedTarget?.closest("[data-lens-overlay]") && !hoveredElement?.contains(relatedTarget)) {
+              setHoveredElement(null)
+            }
+          }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-3"
+          >
+            <div className="grid grid-cols-3 gap-2 w-80">
+              {hoveredElement?.tagName === "IMG" ? (
+                // Image-specific actions
+                ["Analyze Image"].map((action) => (
+                  <Badge
+                    key={action}
+                    variant="secondary"
+                    className="cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900 transition-all duration-200 text-xs px-2 py-1 select-none hover:scale-105 active:scale-95 text-center"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleAction(action, getElementContent(hoveredElement))
+                    }}
+                    onMouseDown={(e) => e.stopPropagation()}
+                  >
+                    {action}
+                  </Badge>
+                ))
+              ) : (
+                // Text-specific actions
+                ["Summarize", "Make concise", "Visualize", "Find similar", "Ask"].map((action) => (
+                  <Badge
+                    key={action}
+                    variant="secondary"
+                    className="cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900 transition-all duration-200 text-xs px-2 py-1 select-none hover:scale-105 active:scale-95 text-center"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      if (action === "Ask") {
+                        handleAskAction()
+                      } else {
+                        handleAction(action, getElementContent(hoveredElement))
+                      }
+                    }}
+                    onMouseDown={(e) => e.stopPropagation()}
+                  >
+                    {action}
+                  </Badge>
+                ))
+              )}
             </div>
-          )}
+          </motion.div>
+        </div>
+      )}
 
-          {/* Loading Skeleton Cards */}
+      {/* Loading Skeleton Cards */}
           <AnimatePresence>
             {loadingCards.map((cardId) => (
               <motion.div
