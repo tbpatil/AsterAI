@@ -1,28 +1,31 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { motion } from "framer-motion"
 import { useEffect } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { Spotlight } from "@/components/ui/spotlight"
+import { GlowingEffect } from "@/components/ui/glowing-effect"
+import { TracingBeam } from "@/components/ui/tracing-beam"
+import { HoverBorderGradient } from "@/components/ui/hover-border-gradient"
 import { 
-  Eye, 
   Zap, 
-  Brain, 
   Search, 
   FileText, 
   BarChart3, 
   ArrowRight,
   Sparkles,
-  Target,
-  Clock,
-  Users,
   ChevronRight,
-  Star,
   Lightbulb,
   Layers,
-  Infinity
+  Infinity,
+  MousePointer,
+  Brain,
+  Linkedin,
+  Github,
+  ExternalLink
 } from "lucide-react"
 
 export default function LandingPage() {
@@ -65,7 +68,7 @@ export default function LandingPage() {
             >
               <Badge className="mb-8 bg-white/10 border border-white/20 text-white hover:bg-white/20 transition-colors duration-300 px-6 py-2 text-sm backdrop-blur-sm">
                 <Sparkles className="w-4 h-4 mr-2" />
-                Powered by xAI and v0
+                Built on xAI · v0
               </Badge>
             </motion.div>
             
@@ -91,9 +94,9 @@ export default function LandingPage() {
               transition={{ delay: 0.4, duration: 0.8 }}
               className="text-xl md:text-2xl text-neutral-300 mb-8 max-w-4xl mx-auto leading-relaxed"
             >
-              Revolutionary AI-powered document analysis that transforms how you interact with content.
+              Context right where your cursor is.
               <br />
-              <span className="text-blue-400 font-medium">Analyze, summarize, and visualize</span> any document with intelligent lens technology.
+              <span className="text-blue-400 font-medium">Hold ⌥ Option</span> to reveal the Lens and see the gist instantly.
             </motion.p>
             
             {/* Tagline */}
@@ -104,7 +107,7 @@ export default function LandingPage() {
               className="mb-12"
             >
               <p className="text-lg md:text-xl text-gray-400 font-semibold tracking-wide">
-                "We're not just building a tool - we're creating the next paradigm for human-document interaction."
+                Point. Press. Know.
               </p>
             </motion.div>
             
@@ -116,25 +119,28 @@ export default function LandingPage() {
               className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
             >
               <Link href="/demo">
-                <motion.button
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="group relative bg-white text-black px-8 py-4 rounded-xl font-semibold text-lg overflow-hidden transition-all duration-300 flex items-center gap-2 shadow-2xl"
+                <HoverBorderGradient
+                  containerClassName="rounded-full"
+                  as="div"
+                  className="bg-black dark:bg-black text-white flex items-center space-x-2 px-8 py-4 font-semibold text-lg"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <span className="relative z-10 group-hover:text-white transition-colors duration-300">Show Demo</span>
-                  <ArrowRight className="w-5 h-5 relative z-10 group-hover:text-white transition-colors duration-300 group-hover:translate-x-1" />
-                </motion.button>
+                  <span>Try the demo</span>
+                  <ArrowRight className="w-5 h-5" />
+                </HoverBorderGradient>
               </Link>
               
-              <motion.button
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className="border border-white/20 bg-white/5 backdrop-blur-sm text-white hover:bg-white/10 hover:border-white/40 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center gap-2"
+              <HoverBorderGradient
+                containerClassName="rounded-full"
+                as="button"
+                onClick={() => {
+                  const howItWorksSection = document.querySelector('#how-it-works-section') || document.querySelector('section:nth-of-type(2)');
+                  howItWorksSection?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="bg-black dark:bg-black text-white flex items-center space-x-2 px-8 py-4 font-semibold text-lg"
               >
-                Learn More
+                <span>Learn more</span>
                 <ChevronRight className="w-5 h-5" />
-              </motion.button>
+              </HoverBorderGradient>
             </motion.div>
             
             {/* Stats */}
@@ -145,28 +151,25 @@ export default function LandingPage() {
               className="flex flex-wrap items-center justify-center gap-8 text-sm text-neutral-400"
             >
               <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
-                <Target className="w-4 h-4 text-green-400" />
-                <span className="text-white">94% Accuracy</span>
-            </div>
+                <span className="text-white">Precise</span>
+              </div>
+              <div className="w-1 h-1 bg-neutral-600 rounded-full"></div>
               <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-blue-400" />
-                <span className="text-white">40% Faster</span>
-            </div>
+                <span className="text-white">Fast</span>
+              </div>
+              <div className="w-1 h-1 bg-neutral-600 rounded-full"></div>
               <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
-                <Star className="w-4 h-4 text-yellow-400" />
-                <span className="text-white">Trusted by 1000+</span>
-          </div>
+                <span className="text-white">Trusted</span>
+              </div>
             </motion.div>
           </motion.div>
         </div>
-          </section>
+      </section>
 
       {/* Features Section */}
-      <section className="relative py-32 bg-black/50 backdrop-blur-sm">
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-950/10 to-transparent"></div>
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+      <section id="features-section" className="relative py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/10 to-black"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -174,82 +177,26 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">
-              Intelligent Document Analysis
+            <h2 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight">
+              Intelligent Document
+              <br />
+              <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
+                Analysis
+              </span>
             </h2>
-            <p className="text-xl text-neutral-400 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-neutral-300 mb-12 leading-relaxed max-w-4xl mx-auto">
               Experience the future of document interaction with our lens-based AI technology
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                icon: <Eye className="w-10 h-10" />,
-                title: "Lens Mode",
-                description: "Activate intelligent analysis by holding Alt and hovering over any content",
-                gradient: "from-blue-500 to-cyan-500",
-                glowColor: "shadow-blue-500/25"
-              },
-              {
-                icon: <FileText className="w-10 h-10" />,
-                title: "Smart Summarization",
-                description: "Get concise, intelligent summaries of any text content in seconds",
-                gradient: "from-green-500 to-emerald-500",
-                glowColor: "shadow-green-500/25"
-              },
-              {
-                icon: <BarChart3 className="w-10 h-10" />,
-                title: "Content Visualization",
-                description: "Transform complex information into clear, visual representations",
-                gradient: "from-purple-500 to-pink-500",
-                glowColor: "shadow-purple-500/25"
-              },
-              {
-                icon: <Search className="w-10 h-10" />,
-                title: "Similarity Detection",
-                description: "Find related content and connections across your documents",
-                gradient: "from-orange-500 to-red-500",
-                glowColor: "shadow-orange-500/25"
-              }
-            ].map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -10 }}
-                className="group"
-              >
-                <Card className={`relative p-8 h-full bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-500 hover:shadow-2xl ${feature.glowColor} hover:bg-white/10`}>
-                  {/* Gradient overlay on hover */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-lg`}></div>
-                  
-                  <div className={`relative inline-flex p-4 rounded-2xl bg-gradient-to-br ${feature.gradient} mb-6 shadow-lg`}>
-                    <div className="text-white">
-                      {feature.icon}
-                    </div>
-            </div>
-
-                  <h3 className="relative text-2xl font-bold text-white mb-4 group-hover:text-white transition-colors duration-300">
-                    {feature.title}
-                  </h3>
-                  
-                  <p className="relative text-neutral-400 leading-relaxed group-hover:text-neutral-300 transition-colors duration-300">
-                    {feature.description}
-                  </p>
-                </Card>
-              </motion.div>
-            ))}
+          <div className="max-w-6xl mx-auto">
+            <FeaturesGrid />
           </div>
         </div>
-          </section>
+      </section>
 
       {/* How It Works Section */}
-      <section className="relative py-32">
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-950/10 to-transparent"></div>
+      <section id="how-it-works-section" className="relative py-32 bg-black">
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
           <motion.div
@@ -260,84 +207,209 @@ export default function LandingPage() {
             className="text-center mb-20"
           >
             <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">
-              How AsterAI Works
+              How It Works
             </h2>
             <p className="text-xl text-neutral-400 max-w-3xl mx-auto leading-relaxed">
               Three simple steps to unlock the power of intelligent document analysis
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <TracingBeam className="px-6">
+            <div className="space-y-24">
+              {[
+                {
+                  step: "01",
+                  title: "Reveal the Lens",
+                  description: "Hold ⌥ Option.",
+                  symbol: "⌥"
+                },
+                {
+                  step: "02", 
+                  title: "Target",
+                  description: "Hover over what matters.",
+                  symbol: "→"
+                },
+                {
+                  step: "03",
+                  title: "Instant insight",
+                  description: "Tap any button to see the gist.",
+                  symbol: "✦"
+                }
+              ].map((step, index) => (
+                <motion.div
+                  key={step.step}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.15 }}
+                  viewport={{ once: true }}
+                  className="group"
+                >
+                  <div className="flex flex-col md:flex-row items-start gap-8 md:gap-12">
+                    {/* Step indicator */}
+                    <div className="relative flex-shrink-0">
+                      {/* Clean circle with symbol */}
+                      <div className="relative inline-flex items-center justify-center w-20 h-20 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-sm group-hover:bg-white/10 group-hover:border-white/20 transition-all duration-300">
+                        <span className="text-3xl text-white/80 group-hover:text-white transition-colors duration-300">
+                          {step.symbol}
+                        </span>
+                      </div>
+                      
+                      {/* Minimal step number */}
+                      <div className="absolute -top-2 -right-2 bg-white/10 border border-white/20 text-white/60 font-medium text-sm px-2 py-1 rounded-lg backdrop-blur-sm">
+                        {step.step}
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1">
+                      <h3 className="text-2xl md:text-3xl font-semibold text-white mb-3 group-hover:text-white transition-colors duration-300">
+                        {step.title}
+                      </h3>
+                      
+                      <p className="text-neutral-400 leading-relaxed group-hover:text-neutral-300 transition-colors duration-300 text-lg">
+                        {step.description}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </TracingBeam>
+        </div>
+      </section>
+
+      {/* Meet The Team Section */}
+      <section className="relative py-32 bg-black">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">
+              Meet The Team
+            </h2>
+            <p className="text-xl text-neutral-400 max-w-3xl mx-auto leading-relaxed">
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
-                step: "01",
-                title: "Activate Lens Mode",
-                description: "Hold the Alt key to activate our intelligent overlay system that detects interactive content",
-                icon: <Eye className="w-12 h-12" />,
-                gradient: "from-blue-500 to-cyan-500"
+                name: "Anirudh Venkatachalam",
+                linkedin: "https://www.linkedin.com/in/anirudhvee/",
+                github: "https://github.com/anirudhvee",
+                label: "Favorite Quote",
+                detail: "If you live each day as if it was your last, someday you'll most certainly be right - Steve Jobs",
+                initials: "AV",
+                photo: "/team/anirudh.jpg"
               },
               {
-                step: "02",
-                title: "Select Content",
-                description: "Hover over any text, image, or section to see available analysis options appear instantly",
-                icon: <Target className="w-12 h-12" />,
-                gradient: "from-purple-500 to-pink-500"
+                name: "Manasvini Narayanan",
+                linkedin: "https://www.linkedin.com/in/mana-nara/",
+                github: "https://github.com/mana-nara",
+                label: "Favorite Quote",
+                detail: "You miss all the shots you don't take!",
+                initials: "MN",
+                photo: "/team/manasvini.jpg"
               },
               {
-                step: "03",
-                title: "Get AI Insights",
-                description: "Click on analysis options to get summaries, visualizations, or find similar content",
-                icon: <Brain className="w-12 h-12" />,
-                gradient: "from-orange-500 to-red-500"
+                name: "ManojBaasha",
+                linkedin: "https://www.linkedin.com/in/manojelango/",
+                github: "https://github.com/ManojBaasha",
+                label: "Fun Fact",
+                detail: "",
+                initials: "MB",
+                photo: "/team/manoj.jpg"
+              },
+              {
+                name: "Toniya Patil",
+                linkedin: "https://www.linkedin.com/in/toniya/",
+                github: "https://github.com/tbpatil",
+                label: "Superpower",
+                detail: "",
+                initials: "TP",
+                photo: "/team/toniya.jpg"
               }
-            ].map((step, index) => (
+            ].map((member, index) => (
               <motion.div
-                key={step.step}
+                key={member.name}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                whileHover={{ scale: 1.05 }}
-                className="text-center group"
+                className="group"
               >
-                <div className="relative mb-8">
-                  {/* Main icon container */}
-                  <div className={`relative inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br ${step.gradient} text-white rounded-3xl shadow-2xl group-hover:shadow-3xl transition-all duration-500`}>
-                    {step.icon}
-                    
-                    {/* Glow effect */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${step.gradient} rounded-3xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 scale-150`}></div>
+                <div className="relative bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-300">
+                  {/* Avatar */}
+                  <div className="flex justify-center mb-6">
+                    <div className="relative w-20 h-20 rounded-full overflow-hidden group-hover:scale-105 transition-transform duration-300">
+                      <Image
+                        src={member.photo}
+                        alt={`${member.name} - AsterAI Team Member`}
+                        width={80}
+                        height={80}
+                        className="object-cover w-full h-full"
+                        onError={(e) => {
+                          // Fallback to initials if image fails to load
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const fallback = target.nextElementSibling as HTMLElement;
+                          if (fallback) fallback.style.display = 'flex';
+                        }}
+                      />
+                      {/* Fallback initials */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl hidden">
+                        {member.initials}
+                      </div>
+                    </div>
                   </div>
                   
-                  {/* Step number badge */}
-                  <div className="absolute -top-3 -right-3 bg-white text-black font-bold text-lg px-3 py-1 rounded-full border-4 border-black shadow-lg">
-                    {step.step}
-              </div>
-
-                  {/* Connection line (not for last item) */}
-                  {index < 2 && (
-                    <div className="hidden lg:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-white/20 to-transparent transform translate-x-8"></div>
-                  )}
+                  {/* Name */}
+                  <h3 className="text-xl font-semibold text-white mb-2 text-center group-hover:text-white transition-colors duration-300">
+                    {member.name}
+                  </h3>
+                  
+                  {/* Personal Detail */}
+                  <div className="text-center mb-6">
+                    <p className="text-blue-400 text-xs font-medium mb-1 group-hover:text-blue-300 transition-colors duration-300 uppercase tracking-wide">
+                      {member.label}
+                    </p>
+                    <p className="text-neutral-400 text-sm leading-relaxed group-hover:text-neutral-300 transition-colors duration-300">
+                      {member.detail}
+                    </p>
+                  </div>
+                  
+                  {/* Social Links */}
+                  <div className="flex justify-center gap-4">
+                    <a
+                      href={member.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center w-10 h-10 bg-blue-500/10 border border-blue-500/20 rounded-lg text-blue-400 hover:text-blue-300 hover:bg-blue-500/20 hover:border-blue-500/40 transition-all duration-300 group/link"
+                    >
+                      <Linkedin className="w-5 h-5" />
+                    </a>
+                    <a
+                      href={member.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center w-10 h-10 bg-white/10 border border-white/20 rounded-lg text-white/80 hover:text-white hover:bg-white/20 hover:border-white/40 transition-all duration-300 group/link"
+                    >
+                      <Github className="w-5 h-5" />
+                    </a>
+                  </div>
                 </div>
-
-                <h3 className="text-3xl font-bold text-white mb-6 group-hover:text-white transition-colors duration-300">
-                  {step.title}
-                </h3>
-                
-                <p className="text-neutral-400 leading-relaxed max-w-sm mx-auto group-hover:text-neutral-300 transition-colors duration-300 text-lg">
-                  {step.description}
-                </p>
               </motion.div>
             ))}
-                </div>
-              </div>
-          </section>
+          </div>
+        </div>
+      </section>
 
       {/* CTA Section */}
-      <section className="relative py-32 overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/30 via-purple-900/30 to-indigo-900/30"></div>
-        <div className="absolute inset-0 bg-black/40"></div>
+      <section id="about" className="relative py-32 bg-black overflow-hidden">
         
         
         <div className="relative max-w-6xl mx-auto text-center px-4 sm:px-6 lg:px-8 z-10">
@@ -348,29 +420,24 @@ export default function LandingPage() {
             viewport={{ once: true }}
           >
             <h2 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight">
-              Ready to Transform Your
-              <br />
-              <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
-                Document Analysis?
-              </span>
+              Read less. Know more.
             </h2>
             
             <p className="text-xl md:text-2xl text-neutral-300 mb-12 leading-relaxed max-w-4xl mx-auto">
-              Experience the future of intelligent content interaction. Try our demo and see how AsterAI can revolutionize your workflow with cutting-edge AI technology.
+              Watch AsterAI turn dense pages into clear answers—without the busywork.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Link href="/demo">
-                <motion.button
-                  whileHover={{ scale: 1.05, y: -3 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="group relative bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 text-white px-10 py-5 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all duration-300 flex items-center gap-3 overflow-hidden"
+                <HoverBorderGradient
+                  containerClassName="rounded-full"
+                  as="div"
+                  className="bg-black dark:bg-black text-white flex items-center space-x-3 px-10 py-5 font-bold text-xl"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <Zap className="w-6 h-6 relative z-10" />
-                  <span className="relative z-10">Try Interactive Demo</span>
-                  <ArrowRight className="w-6 h-6 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
-                </motion.button>
+                  <Zap className="w-6 h-6" />
+                  <span>Launch demo</span>
+                  <ArrowRight className="w-6 h-6" />
+                </HoverBorderGradient>
               </Link>
               
               <motion.div
@@ -384,7 +451,7 @@ export default function LandingPage() {
                 <div className="w-1 h-1 bg-neutral-600 rounded-full"></div>
                 <div className="flex items-center gap-2">
                   <Lightbulb className="w-5 h-5 text-yellow-400" />
-                  <span>No setup required</span>
+                  <span>No setup</span>
                 </div>
               </motion.div>
             </div>
@@ -412,19 +479,18 @@ export default function LandingPage() {
               </h3>
               
               <p className="text-neutral-400 mb-8 text-lg max-w-2xl mx-auto">
-                Revolutionizing document analysis with intelligent AI technology. 
-                Experience the future of content interaction.
+                A simpler way to understand what's on a page.
               </p>
               
               <div className="flex justify-center items-center space-x-8 text-sm text-neutral-500 mb-8">
                 <div className="flex items-center gap-2">
                   <Layers className="w-4 h-4" />
-                  <span>Built with Next.js</span>
+                  <span>Built with v0</span>
                 </div>
                 <div className="w-1 h-1 bg-neutral-700 rounded-full"></div>
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
-                  <span>Powered by xAI</span>
+                  <span>Powered by Grok</span>
                 </div>
               </div>
             </motion.div>
@@ -434,4 +500,94 @@ export default function LandingPage() {
 
     </div>
   )
-} //hakuna matata
+}
+
+function FeaturesGrid() {
+  return (
+    <ul className="grid grid-cols-1 grid-rows-none gap-4 md:grid-cols-12 md:grid-rows-3 lg:gap-4 xl:max-h-[34rem] xl:grid-rows-2">
+      <GridItem
+        area="md:[grid-area:1/1/2/7] xl:[grid-area:1/1/2/5]"
+        icon={<MousePointer className="h-4 w-4 text-black dark:text-neutral-400" />}
+        title="Lens Mode"
+        description="<strong>Activate intelligent analysis</strong> by holding Alt and hovering over any content"
+      />
+ 
+      <GridItem
+        area="md:[grid-area:1/7/2/13] xl:[grid-area:2/1/3/5]"
+        icon={<FileText className="h-4 w-4 text-black dark:text-neutral-400" />}
+        title="Smart Summarization"
+        description="<strong>Get concise, intelligent summaries</strong> of any text content in seconds"
+      />
+ 
+      <GridItem
+        area="md:[grid-area:2/1/3/7] xl:[grid-area:1/5/3/8]"
+        icon={<BarChart3 className="h-4 w-4 text-black dark:text-neutral-400" />}
+        title="Content Visualization"
+        description="<strong>Transform complex information</strong> into clear, visual representations"
+      />
+ 
+      <GridItem
+        area="md:[grid-area:2/7/3/13] xl:[grid-area:1/8/2/13]"
+        icon={<Search className="h-4 w-4 text-black dark:text-neutral-400" />}
+        title="Similarity Detection"
+        description="<strong>Find related content and connections</strong> across your documents"
+      />
+ 
+      <GridItem
+        area="md:[grid-area:3/1/4/13] xl:[grid-area:2/8/3/13]"
+        icon={<Brain className="h-4 w-4 text-black dark:text-neutral-400" />}
+        title="AI-Powered Intelligence"
+        description="<strong>Advanced machine learning models</strong> that understand context and meaning"
+      />
+    </ul>
+  );
+}
+ 
+interface GridItemProps {
+  area: string;
+  icon: React.ReactNode;
+  title: string;
+  description: React.ReactNode;
+}
+ 
+const GridItem = ({ area, icon, title, description }: GridItemProps) => {
+  return (
+    <motion.li 
+      className={`min-h-[14rem] list-none ${area}`}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: Math.random() * 0.3 }}
+      viewport={{ once: true }}
+      whileHover={{ y: -5 }}
+    >
+      <div className="relative h-full rounded-2xl border border-gray-800 p-2 md:rounded-3xl md:p-3 hover:border-purple-500/50 transition-colors duration-300">
+        <GlowingEffect
+          blur={0}
+          borderWidth={2}
+          spread={80}
+          glow={true}
+          disabled={false}
+          proximity={64}
+          inactiveZone={0.01}
+        />
+        <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl p-6 md:p-6 bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm">
+          <div className="relative flex flex-1 flex-col justify-between gap-3">
+            <div className="w-fit rounded-lg border border-purple-500/30 bg-purple-500/10 p-2">
+              {icon}
+            </div>
+            <div className="space-y-3">
+              <h3 className="pt-0.5 font-sans text-xl/[1.375rem] font-semibold text-balance text-black md:text-2xl/[1.875rem] dark:text-white">
+                {title}
+              </h3>
+              <div className="font-sans text-sm/[1.125rem] text-black md:text-base/[1.375rem] dark:text-neutral-400 [&_strong]:text-white [&_strong]:font-semibold">
+                <div dangerouslySetInnerHTML={{ __html: description as string }} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.li>
+  );
+};
+
+//hakuna matata

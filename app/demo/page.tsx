@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect } from "react"
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 import { LensOverlay } from "@/components/LensOverlay"
 
 export default function AcademicPaperDemo() {
@@ -11,6 +13,15 @@ export default function AcademicPaperDemo() {
   return (
     <div className="min-h-screen bg-white">
       <LensOverlay />
+
+      {/* Back Button */}
+      <Link 
+        href="/"
+        className="fixed top-4 left-4 z-50 bg-white/90 hover:bg-white text-gray-800 px-4 py-2 rounded-lg shadow-lg transition-all duration-300 flex items-center gap-2 backdrop-blur-sm border border-gray-200 hover:border-gray-300"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span className="text-sm font-medium">Back to Home</span>
+      </Link>
 
       {/* PDF-style container */}
       <div className="max-w-4xl mx-auto bg-white shadow-2xl min-h-screen">

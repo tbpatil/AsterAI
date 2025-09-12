@@ -128,7 +128,14 @@ export function LensOverlay() {
         })
         
         if (response.ok) {
-          const data = await response.json()
+          let data
+          try {
+            data = await response.json()
+          } catch (jsonError) {
+            console.error("Failed to parse JSON response:", jsonError)
+            resultContent = "Error: Invalid response format from server"
+            return
+          }
           const analysis = data.analysis
           
           // Format the analysis result
@@ -157,7 +164,14 @@ export function LensOverlay() {
               body: JSON.stringify({ content }),
             })
             if (response.ok) {
-              const data = await response.json()
+              let data
+              try {
+                data = await response.json()
+              } catch (jsonError) {
+                console.error("Failed to parse JSON response:", jsonError)
+                resultContent = "Error: Invalid response format from server"
+                break
+              }
               resultContent = data.summary
             }
             break
@@ -169,7 +183,14 @@ export function LensOverlay() {
               body: JSON.stringify({ content }),
             })
             if (response.ok) {
-              const data = await response.json()
+              let data
+              try {
+                data = await response.json()
+              } catch (jsonError) {
+                console.error("Failed to parse JSON response:", jsonError)
+                resultContent = "Error: Invalid response format from server"
+                break
+              }
               resultContent = data.conciseText
             }
             break
@@ -181,7 +202,14 @@ export function LensOverlay() {
               body: JSON.stringify({ content }),
             })
             if (response.ok) {
-              const data = await response.json()
+              let data
+              try {
+                data = await response.json()
+              } catch (jsonError) {
+                console.error("Failed to parse JSON response:", jsonError)
+                resultContent = "Error: Invalid response format from server"
+                break
+              }
               resultContent = data.visualization
             }
             break
@@ -193,7 +221,14 @@ export function LensOverlay() {
               body: JSON.stringify({ content }),
             })
             if (response.ok) {
-              const data = await response.json()
+              let data
+              try {
+                data = await response.json()
+              } catch (jsonError) {
+                console.error("Failed to parse JSON response:", jsonError)
+                resultContent = "Error: Invalid response format from server"
+                break
+              }
               resultContent = data.similarContent
             }
             break
@@ -325,7 +360,14 @@ export function LensOverlay() {
 
       let resultContent = ""
       if (response.ok) {
-        const data = await response.json()
+        let data
+        try {
+          data = await response.json()
+        } catch (jsonError) {
+          console.error("Failed to parse JSON response:", jsonError)
+          resultContent = "Error: Invalid response format from server"
+          return
+        }
         resultContent = data.answer || "No answer received"
       } else {
         resultContent = `Failed to get answer (${response.status}). Please try again.`
