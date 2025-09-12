@@ -284,7 +284,7 @@ export function LensOverlay() {
     }
     
     // Ensure the card doesn't go off the right edge
-    cardLeft = Math.min(rect.left, window.innerWidth - 350)
+    cardLeft = Math.min(rect.left, window.innerWidth - 400)
     
     return { top: cardTop, left: cardLeft }
   }
@@ -311,19 +311,17 @@ export function LensOverlay() {
     setLoadingCards((prev) => [...prev, cardId])
     setShowAskModal(false)
 
-    try {
-      // Add timeout to prevent hanging
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 second timeout
+    // Add timeout to prevent hanging
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 second timeout
 
+    try {
       const response = await fetch("/api/lens/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content, question: askQuestion }),
         signal: controller.signal,
       })
-
-      clearTimeout(timeoutId)
 
       let resultContent = ""
       if (response.ok) {
@@ -368,8 +366,34 @@ export function LensOverlay() {
       }
 
       setResultCards((prev) => [...prev, errorCard])
+    } finally {
+      // Always clear the timeout, regardless of success or failure
+      clearTimeout(timeoutId)
     }
   }
+
+  // Handle keyboard shortcuts for ask modal
+  useEffect(() => {
+    if (!showAskModal) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Cmd+Enter or Ctrl+Enter to submit
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        e.preventDefault()
+        if (askQuestion.trim()) {
+          handleAskSubmit()
+        }
+      }
+      // Escape to close modal
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        setShowAskModal(false)
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [showAskModal, askQuestion, selectedElement])
 
   return (
     <>
@@ -504,7 +528,7 @@ export function LensOverlay() {
                 className="fixed z-50"
                 style={{
                   top: hoveredElement?.getBoundingClientRect().bottom || 0 + 10,
-                  left: Math.max(16, Math.min(hoveredElement?.getBoundingClientRect().left || 0, window.innerWidth - 320)),
+                  left: Math.max(16, Math.min(hoveredElement?.getBoundingClientRect().left || 0, window.innerWidth - 400)),
                 }}
               >
                 <SkeletonCard />
@@ -570,13 +594,20 @@ export function LensOverlay() {
                         handleAskSubmit()
                       }}
                       disabled={!askQuestion.trim()}
-                      className={`px-4 py-2 text-sm rounded-md transition-colors ${
+                      className={`px-4 py-2 text-sm rounded-md transition-colors flex items-center gap-2 ${
                         askQuestion.trim() 
                           ? "bg-blue-600 text-white hover:bg-blue-700" 
                           : "bg-gray-400 text-gray-200 cursor-not-allowed"
                       }`}
                     >
                       Ask
+                      <kbd className={`text-xs px-1.5 py-0.5 rounded border ${
+                        askQuestion.trim() 
+                          ? "bg-blue-500 border-blue-400 text-blue-100" 
+                          : "bg-gray-500 border-gray-400 text-gray-300"
+                      }`}>
+                        ⌘↵
+                      </kbd>
                     </button>
                   </div>
                 </motion.div>

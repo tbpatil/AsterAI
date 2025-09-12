@@ -1,8 +1,13 @@
 "use client"
 
+import { useEffect } from "react"
 import { LensOverlay } from "@/components/LensOverlay"
 
 export default function AcademicPaperDemo() {
+  // Ensure page always starts at the top
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
   return (
     <div className="min-h-screen bg-white">
       <LensOverlay />

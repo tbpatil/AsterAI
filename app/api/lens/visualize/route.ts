@@ -1,6 +1,10 @@
 import { generateText } from "ai"
-import { xai } from "@ai-sdk/xai"
+import { createXai } from "@ai-sdk/xai"
 import type { NextRequest } from "next/server"
+
+const xai = createXai({
+  apiKey: process.env.XAI_API_KEY,
+})
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,9 +15,7 @@ export async function POST(request: NextRequest) {
     }
 
     const result = await generateText({
-      model: xai("grok-4", {
-        apiKey: process.env.XAI_API_KEY,
-      }),
+      model: xai("grok-4"),
       prompt: `Analyze the following content and suggest how it could be visualized (charts, diagrams, infographics, etc.). Describe the visual representation in detail:\n\n${content}`,
       system:
         "You are a data visualization expert. Suggest appropriate visual representations for content, explaining what type of chart, diagram, or visual would best represent the information.",

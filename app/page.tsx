@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { useEffect } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { Spotlight } from "@/components/ui/spotlight"
@@ -25,6 +26,10 @@ import {
 } from "lucide-react"
 
 export default function LandingPage() {
+  // Ensure page always starts at the top
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
   return (
     <div className="min-h-screen bg-black antialiased relative overflow-hidden"
       style={{
@@ -98,7 +103,7 @@ export default function LandingPage() {
               transition={{ delay: 0.5, duration: 0.8 }}
               className="mb-12"
             >
-              <p className="text-lg md:text-xl text-yellow-400 font-semibold tracking-wide">
+              <p className="text-lg md:text-xl text-gray-400 font-semibold tracking-wide">
                 "We're not just building a tool - we're creating the next paradigm for human-document interaction."
               </p>
             </motion.div>

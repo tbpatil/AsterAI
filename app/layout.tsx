@@ -23,6 +23,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Prevent scroll restoration on page reload
+              if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+              }
+              // Scroll to top on page load
+              window.addEventListener('load', function() {
+                window.scrollTo(0, 0);
+              });
+            `,
+          }}
+        />
+      </head>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} bg-black text-white antialiased`} suppressHydrationWarning={true}>
         {children}
         <Analytics />
