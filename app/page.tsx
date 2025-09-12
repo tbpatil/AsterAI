@@ -60,7 +60,7 @@ export default function LandingPage() {
             >
               <Badge className="mb-8 bg-white/10 border border-white/20 text-white hover:bg-white/20 transition-colors duration-300 px-6 py-2 text-sm backdrop-blur-sm">
                 <Sparkles className="w-4 h-4 mr-2" />
-                Powered by Advanced AI
+                Powered by xAI and v0
               </Badge>
             </motion.div>
             
@@ -84,18 +84,30 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="text-xl md:text-2xl text-neutral-300 mb-12 max-w-4xl mx-auto leading-relaxed"
+              className="text-xl md:text-2xl text-neutral-300 mb-8 max-w-4xl mx-auto leading-relaxed"
             >
               Revolutionary AI-powered document analysis that transforms how you interact with content.
               <br />
               <span className="text-blue-400 font-medium">Analyze, summarize, and visualize</span> any document with intelligent lens technology.
             </motion.p>
             
+            {/* Tagline */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+              className="mb-12"
+            >
+              <p className="text-lg md:text-xl text-yellow-400 font-semibold tracking-wide">
+                "We're not just building a tool - we're creating the next paradigm for human-document interaction."
+              </p>
+            </motion.div>
+            
             {/* CTA Buttons */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
             >
               <Link href="/demo">
@@ -124,7 +136,7 @@ export default function LandingPage() {
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
+              transition={{ delay: 0.7, duration: 0.8 }}
               className="flex flex-wrap items-center justify-center gap-8 text-sm text-neutral-400"
             >
               <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
