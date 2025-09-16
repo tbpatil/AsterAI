@@ -1,6 +1,10 @@
 import { generateText } from "ai"
-import { xai } from "@ai-sdk/xai"
+import { createXai } from "@ai-sdk/xai"
 import type { NextRequest } from "next/server"
+
+const xai = createXai({
+  apiKey: process.env.XAI_API_KEY,
+})
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,9 +15,7 @@ export async function POST(request: NextRequest) {
     }
 
     const result = await generateText({
-      model: xai("grok-4", {
-        apiKey: process.env.XAI_API_KEY,
-      }),
+      model: xai("grok-4"),
       prompt: `Summarize the following content in 2-3 concise sentences, focusing on the key points and main ideas:\n\n${content}`,
       system:
         "You are a helpful AI assistant that creates clear, concise summaries. Focus on extracting the most important information and presenting it in an easy-to-understand format.",

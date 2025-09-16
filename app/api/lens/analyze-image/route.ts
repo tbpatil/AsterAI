@@ -1,17 +1,27 @@
-import { generateObject } from "ai"
-import { xai } from "@ai-sdk/xai"
-import { z } from "zod"
+import { generateText } from "ai"
+import { createXai } from "@ai-sdk/xai"
 import type { NextRequest } from "next/server"
 
-const ImageAnalysisSchema = z.object({
-  summary: z.string().describe("A concise summary of what the image shows"),
-  conciseDescription: z.string().describe("A very brief, one-sentence description of the image"),
-  isGraph: z.boolean().describe("Whether this image appears to be a graph, chart, or data visualization"),
-  graphType: z.string().optional().describe("If it's a graph, what type (bar chart, line graph, pie chart, etc.)"),
-  recreationInstructions: z.string().optional().describe("If it's a graph, detailed instructions on how to recreate it"),
-  keyDataPoints: z.array(z.string()).optional().describe("Key data points or values visible in the image"),
-  insights: z.string().optional().describe("Key insights or patterns visible in the image")
+const xai = createXai({
+  apiKey: process.env.XAI_API_KEY,
 })
+
+// Helper functions to parse the response
+function extractSection(text: string, section: string): string {
+  const regex = new RegExp(`\\*\\*${section}:\\*\\*\\s*([^\\n]+)`, 'i')
+  const match = text.match(regex)
+  return match ? match[1].trim() : ""
+}
+
+function extractBulletPoints(text: string): string[] {
+  const bulletRegex = /•\s*([^\n]+)/g
+  const matches = []
+  let match
+  while ((match = bulletRegex.exec(text)) !== null) {
+    matches.push(match[1].trim())
+  }
+  return matches
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,18 +31,15 @@ export async function POST(request: NextRequest) {
       return new Response("Image data is required", { status: 400 })
     }
 
-    const result = await generateObject({
-      model: xai("grok-4", {
-        apiKey: process.env.XAI_API_KEY,
-      }),
-      schema: ImageAnalysisSchema,
+    const result = await generateText({
+      model: xai("grok-4"),
       messages: [
         {
           role: "user",
           content: [
             {
               type: "text",
-              text: "Analyze this image and provide a comprehensive analysis. If it's a graph or chart, focus on identifying the data and providing clear recreation instructions. If it's a regular image, provide a clear summary and concise description."
+              text: "Analyze this image and provide a comprehensive analysis. Format your response as follows:\n\n**Summary:** [Brief summary of what the image shows]\n\n**Description:** [One-sentence description]\n\n**Chart Type:** [If it's a graph/chart, specify the type]\n\n**Key Data Points:**\n• [List key data points if applicable]\n\n**Insights:** [Key insights or patterns]"
             },
             {
               type: "image",
@@ -43,8 +50,19 @@ export async function POST(request: NextRequest) {
       ]
     })
 
+    // Parse the response to create a structured object
+    const analysisText = result.text
+    const analysis = {
+      summary: extractSection(analysisText, "Summary"),
+      conciseDescription: extractSection(analysisText, "Description"),
+      isGraph: analysisText.toLowerCase().includes("chart") || analysisText.toLowerCase().includes("graph"),
+      graphType: extractSection(analysisText, "Chart Type"),
+      keyDataPoints: extractBulletPoints(analysisText),
+      insights: extractSection(analysisText, "Insights")
+    }
+
     return Response.json({ 
-      analysis: result.object,
+      analysis,
       success: true 
     })
   } catch (error) {
