@@ -329,7 +329,7 @@ export default function LandingPage() {
                 linkedin: "https://www.linkedin.com/in/toniya/",
                 github: "https://github.com/tbpatil",
                 label: "Favorite Quote",
-                detail: "“It is never too late to be what you might have been",
+                detail: "It is never too late to be what you might have been",
                 initials: "TP",
                 photo: "/team/toniya.jpg"
               }
