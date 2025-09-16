@@ -319,8 +319,8 @@ export default function LandingPage() {
                 name: "ManojBaasha",
                 linkedin: "https://www.linkedin.com/in/manojelango/",
                 github: "https://github.com/ManojBaasha",
-                label: "Fun Fact",
-                detail: "",
+                label: "Favorite Quote",
+                detail: "Bring Life to Ideas - Seshu",
                 initials: "MB",
                 photo: "/team/manoj.jpg"
               },
@@ -328,8 +328,8 @@ export default function LandingPage() {
                 name: "Toniya Patil",
                 linkedin: "https://www.linkedin.com/in/toniya/",
                 github: "https://github.com/tbpatil",
-                label: "Superpower",
-                detail: "",
+                label: "Favorite Quote",
+                detail: "“It is never too late to be what you might have been",
                 initials: "TP",
                 photo: "/team/toniya.jpg"
               }
@@ -342,9 +342,9 @@ export default function LandingPage() {
                 viewport={{ once: true }}
                 className="group"
               >
-                <div className="relative bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-300">
-                  {/* Avatar */}
-                  <div className="flex justify-center mb-6">
+                <div className="relative bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-300 h-85 flex flex-col">
+                  {/* Avatar - Fixed at top */}
+                  <div className="flex justify-center mb-4 flex-shrink-0">
                     <div className="relative w-20 h-20 rounded-full overflow-hidden group-hover:scale-105 transition-transform duration-300">
                       <Image
                         src={member.photo}
@@ -367,23 +367,29 @@ export default function LandingPage() {
                     </div>
                   </div>
                   
-                  {/* Name */}
-                  <h3 className="text-xl font-semibold text-white mb-2 text-center group-hover:text-white transition-colors duration-300">
+                  {/* Name - Fixed below avatar */}
+                  <h3 className="text-xl font-semibold text-white mb-3 text-center group-hover:text-white transition-colors duration-300 flex-shrink-0">
                     {member.name}
                   </h3>
                   
-                  {/* Personal Detail */}
-                  <div className="text-center mb-6">
-                    <p className="text-blue-400 text-xs font-medium mb-1 group-hover:text-blue-300 transition-colors duration-300 uppercase tracking-wide">
-                      {member.label}
-                    </p>
-                    <p className="text-neutral-400 text-sm leading-relaxed group-hover:text-neutral-300 transition-colors duration-300">
-                      {member.detail}
-                    </p>
+                  {/* Personal Detail - Flexible middle section with aligned labels */}
+                  <div className="text-center flex-1 flex flex-col min-h-0">
+                    {/* Fixed height for label alignment */}
+                    <div className="h-8 flex items-center justify-center flex-shrink-0">
+                      <p className="text-blue-400 text-xs font-medium group-hover:text-blue-300 transition-colors duration-300 uppercase tracking-wide">
+                        {member.label}
+                      </p>
+                    </div>
+                    {/* Floating quote content */}
+                    <div className="flex-1 flex items-start justify-center min-h-0 pt-2">
+                      <p className="text-neutral-400 text-sm leading-relaxed group-hover:text-neutral-300 transition-colors duration-300 line-clamp-4 overflow-hidden">
+                        {member.detail}
+                      </p>
+                    </div>
                   </div>
                   
-                  {/* Social Links */}
-                  <div className="flex justify-center gap-4">
+                  {/* Social Links - Fixed at bottom */}
+                  <div className="flex justify-center gap-4 mt-4 flex-shrink-0">
                     <a
                       href={member.linkedin}
                       target="_blank"
