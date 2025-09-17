@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { Spotlight } from "@/components/ui/spotlight"
@@ -25,7 +25,11 @@ import {
   Brain,
   Linkedin,
   Github,
-  ExternalLink
+  ExternalLink,
+  Send,
+  Mail,
+  User,
+  MessageSquare
 } from "lucide-react"
 
 export default function LandingPage() {
@@ -465,6 +469,9 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Contact Section */}
+      <ContactSection />
+
       {/* Footer */}
       <footer className="relative bg-black border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -597,3 +604,207 @@ const GridItem = ({ area, icon, title, description }: GridItemProps) => {
 };
 
 //hakuna matata
+
+function ContactSection() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus("idle");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSubmitStatus("success");
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      } else {
+        setSubmitStatus("error");
+      }
+    } catch {
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <section id="contact" className="relative px-6 sm:px-12 lg:px-[80px] py-[120px] bg-black">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="max-w-[800px] mx-auto"
+      >
+        {/* Header */}
+        <div className="text-center mb-[60px]">
+          <motion.h2
+            className="text-[64px] font-bold leading-[100%] tracking-[-0.02em] text-white mb-[24px]"
+            style={{ fontFamily: "Inter Tight, sans-serif" }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+We'd love your feedback!
+          </motion.h2>
+          <motion.p
+            className="text-[20px] text-gray-300 leading-[140%]"
+            style={{ fontFamily: "Inter Tight, sans-serif" }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            Your thoughts, suggestions, and experiences with AsterAI mean the world to us! Share what's working, what could be better, or just say hello.
+            <br />
+          </motion.p>
+        </div>
+
+        {/* Contact Form */}
+        <motion.form
+          onSubmit={handleSubmit}
+          className="space-y-[32px]"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          {/* Name and Email Row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <User size={20} />
+              </div>
+              <input
+                type="text"
+                name="name"
+                placeholder="Your name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all backdrop-blur-sm"
+                style={{ fontFamily: "Inter Tight, sans-serif" }}
+              />
+            </div>
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <Mail size={20} />
+              </div>
+              <input
+                type="email"
+                name="email"
+                placeholder="Your email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all backdrop-blur-sm"
+                style={{ fontFamily: "Inter Tight, sans-serif" }}
+              />
+            </div>
+          </div>
+
+          {/* Subject */}
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <MessageSquare size={20} />
+            </div>
+            <input
+              type="text"
+              name="subject"
+              placeholder="Subject"
+              value={formData.subject}
+              onChange={handleChange}
+              required
+              className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all backdrop-blur-sm"
+              style={{ fontFamily: "Inter Tight, sans-serif" }}
+            />
+          </div>
+
+          {/* Message */}
+          <div>
+            <textarea
+              name="message"
+              placeholder="Share your feedback, suggestions, or just say hello..."
+              value={formData.message}
+              onChange={handleChange}
+              required
+              rows={6}
+              className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all resize-none backdrop-blur-sm"
+              style={{ fontFamily: "Inter Tight, sans-serif" }}
+            />
+          </div>
+
+          {/* Submit Button */}
+          <div className="flex justify-center">
+            <motion.button
+              type="submit"
+              disabled={isSubmitting}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="bg-white text-black px-10 py-4 text-[18px] font-medium rounded-full flex items-center gap-3 hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ fontFamily: "Inter Tight, sans-serif" }}
+            >
+              {isSubmitting ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                  Sending...
+                </>
+              ) : (
+                <>
+                  Send feedback
+                  <Send size={18} />
+                </>
+              )}
+            </motion.button>
+          </div>
+
+          {/* Status Messages */}
+          {submitStatus === "success" && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center p-4 bg-green-500/10 border border-green-500/20 rounded-2xl text-green-400"
+              style={{ fontFamily: "Inter Tight, sans-serif" }}
+            >
+              Thank you for your feedback! We love connecting with new people and are thrilled to hear from you!
+            </motion.div>
+          )}
+
+          {submitStatus === "error" && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400"
+              style={{ fontFamily: "Inter Tight, sans-serif" }}
+            >
+              ❌ Something went wrong. Please try again or email us directly.
+            </motion.div>
+          )}
+        </motion.form>
+      </motion.div>
+    </section>
+  );
+}
